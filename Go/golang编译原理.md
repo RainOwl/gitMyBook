@@ -12,19 +12,47 @@
 
 词法、语法分析--->类型检查--->AST转换--->SSA生成--->机器码生成
 
-![](D:\gitMyBook\Go\编译原理的核心过程.png)
+![](images/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%9A%84%E6%A0%B8%E5%BF%83%E8%BF%87%E7%A8%8B.png)
 
- [抽象语法树](https://en.wikipedia.org/wiki/Abstract_syntax_tree)（AST） 
+ **[抽象语法树](https://en.wikipedia.org/wiki/Abstract_syntax_tree)（AST）** 
 
-![](D:\gitMyBook\Go\抽象语法树.png)
+![](images/%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91.png)
 
- [静态单赋值](https://en.wikipedia.org/wiki/Static_single_assignment_form)（Static Single Assignment, SSA）是中间代码的一个特性，如果一个中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。 
+ **静态单赋值**
+
+（Static Single Assignment, SSA）是中间代码的一个特性，如果一个中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。 
 
 ```go
 x := 1
 x := 2
 y := x
 ```
+
+**指令集**
+
+很多开发者都会遇到在生产环境运行的结果和本地不同的问题，导致这种情况的原因其实非常复杂，不同机器使用不同的指令也是可能的原因之一。
+
+大多数开发者都会使用 x86_64 作为工作上主要使用的硬件，在命令行中输入 `uname -m` 就能够获得当前机器上硬件的信息： 
+
+```bash
+$ uname -m
+x86_64  //x86 是目前比较常见的指令集
+```
+
+x86 是目前比较常见的指令集，除了 x86 之外，还有很多其他的指令集，不同的处理器使用了不同的架构和机器语言，所以很多编程语言为了在不同的机器上运行需要将源代码根据架构翻译成不同的机器代码。 
+
+复杂指令集计算机（CISC）和精简指令集计算机（RISC）是目前的两种 CPU 区别，它们在设计理念上会有一些不同，从名字我们就能看出来这两种不同的设计有什么区别：
+
+- 复杂指令集通过增加指令的数量减少需要执行的指令数；
+- 精简指令集能使用更少的指令完成目标的计算任务；
+
+早期的 CPU 为了减少机器语言指令的数量使用复杂指令集完成计算任务，这两者其实并没有绝对的好坏，它们只是在一些设计上的选择不同以达到不同的目的。
+
+
+
+
+
+
 
 
 
@@ -36,7 +64,55 @@ y := x
 
 # 二、词法、语法分析
 
+## 2.1  词法分析
+
+ 词法分析是计算机科学中将字符序列转换为标记（token）序列的过程。
+
+**lex**
+
+lex是用于生成词法分析器的工具，lex 生成的代码能够将一个文件中的字符分解成 Token 序列，很多语言在设计早期都会使用它快速设计出原型。词法分析作为具有固定模式的任务，出现这种更抽象的工具其实是必然的，lex 作为一个代码生成器，使用了类似 C 语言的语法，我们可以理解成 lex 使用正则匹配对输入的字符流进行扫描，下面是一个 lex 文件的示例： 
+
+
+
+
+
+
+
+
+
+
+
+## 2.2  语法分析
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 三、类型检查
+
+
+
+
+
+
+
+
+
+
 
 # 四、中间代码生成
 
@@ -50,7 +126,7 @@ y := x
 
 - 通过这种语言编译出来的应用程序对平台的适应性(Go独立实现了runtime， runtime是支撑程序运行的基础)
 
-  ![](D:\gitMyBook\Go\auto-go-runtime-vs-c-runtime.png)
+  ![](images/auto-go-runtime-vs-c-runtime.png)
 
   libc（C运行时）是目前主流操作系统上应用最普遍的，运行时通常以动态链接库的形式(比如：/lib/x86_64-linux-gnu/libc.so.6)随着系统一并发布，它的功能大致有如下几个：
 
@@ -104,13 +180,6 @@ windows/386
 windows/amd64
 ```
 
-**查看硬件信息**
-
-```bash
-$ uname -m
-x86_64  //x86 是目前比较常见的指令集
-```
-
 **Go 交叉编译**
 
 ```bash
@@ -129,7 +198,7 @@ const goosList = "android darwin dragonfly freebsd js linux nacl netbsd openbsd 
 const goarchList = "386 amd64 amd64p32 arm armbe arm64 arm64be ppc64 ppc64le mips mipsle mips64 mips64le mips64p32 mips64p32le
 ```
 
-![](D:\gitMyBook\Go\Go 语音支持的架构.png)
+![](https://github.com/RainOwl/gitMyBook/raw/master/Go/Go%20%E8%AF%AD%E9%9F%B3%E6%94%AF%E6%8C%81%E7%9A%84%E6%9E%B6%E6%9E%84.png)
 
 **Mac 下编译 Linux和 Windows 64位可执行程序（交叉编译不支持 CGO 所以要禁用它）**
 
@@ -326,7 +395,3 @@ $ nm server_cgo_disabled |grep " U "
 
 
 
-
-参考
-
-https://johng.cn/cgo-enabled-affect-go-static-compile/
